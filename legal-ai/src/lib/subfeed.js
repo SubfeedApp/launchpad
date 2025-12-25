@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const subfeedClient = axios.create({
-  baseURL: process.env.SUBFEED_API_URL || 'https://api-stg.subfeed.app',
+  baseURL: process.env.SUBFEED_API_URL || 'https://api.subfeed.app',
   headers: {
     'Authorization': `Bearer ${process.env.SUBFEED_API_KEY}`,
     'Content-Type': 'application/json',
