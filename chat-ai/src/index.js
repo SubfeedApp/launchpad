@@ -1,8 +1,6 @@
 import 'dotenv/config';
 import express from 'express';
 import chatRouter from './routes/chat.js';
-import analyzeRouter from './routes/analyze.js';
-import historyRouter from './routes/history.js';
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -32,8 +30,6 @@ for (const envVar of requiredEnvVars) {
 
 // Routes
 app.use('/chat', chatRouter);
-app.use('/analyze-contract', analyzeRouter);
-app.use('/history', historyRouter);
 
 // Health check endpoint
 app.get('/health', (req, res) => {
@@ -55,5 +51,5 @@ app.use((req, res) => {
 
 // Start server
 app.listen(PORT, () => {
-  console.log(`Legal AI API listening on port ${PORT}`);
+  console.log(`Chat AI API listening on port ${PORT}`);
 });
