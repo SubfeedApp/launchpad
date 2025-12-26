@@ -1,7 +1,7 @@
 {
-  "name": "legal-ai",
+  "name": "chat-ai",
   "version": "1.0.0",
-  "description": "AI-powered legal document analysis and contract review",
+  "description": "Chat AI Starter powered by Subfeed",
   "main": "src/index.js",
   "type": "module",
   "scripts": {

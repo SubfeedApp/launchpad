@@ -4,7 +4,7 @@ Launch your own AI chat app in 5 minutes. The simplest starting point for any AI
 
 ## Setup
 
-1. Create entity on [Subfeed Cloud](https://cloud.subfeed.app)
+1. Create entity on [Subfeed Cloud](https://subfeed.app/cloud)
 2. Copy API key + Entity ID
 3. Clone this repo
 4. `cp .env.example .env` and paste credentials
@@ -16,10 +16,11 @@ Launch your own AI chat app in 5 minutes. The simplest starting point for any AI
 
 ## Endpoints
 
-| Method | Path     | Description                |
-| ------ | -------- | -------------------------- |
-| POST   | /chat    | Send message, get response |
-| DELETE | /history | Clear session history      |
+| Method | Path                       | Description   |
+| ------ | -------------------------- | ------------- |
+| POST   | /chat                      | Send message  |
+| GET    | /chat/histories/:sessionId | Get history   |
+| DELETE | /chat/histories/:sessionId | Clear session |
 
 ## Features
 
