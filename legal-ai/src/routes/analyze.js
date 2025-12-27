@@ -1,7 +1,6 @@
 import express from 'express';
 import { sendChatMessage } from '../lib/subfeed.js';
 import { processLegalResponse } from '../lib/processor.js';
-import { SYSTEM_PROMPT } from '../prompts/systemPrompt.js';
 
 const router = express.Router();
 
@@ -17,7 +16,7 @@ router.post('/', async (req, res, next) => {
     }
 
     const entityId = process.env.SUBFEED_ENTITY_ID;
-    const analysisPrompt = SYSTEM_PROMPT + 'Analyze this contract:\n\n' + contract_text;
+    const analysisPrompt =`Analyze this contract and identify key clauses, risks, and obligations:\n\n${contract_text}`;
 
     // Send to Subfeed API
     const response = await sendChatMessage(entityId, analysisPrompt, sessionId);

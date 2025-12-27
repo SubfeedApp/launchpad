@@ -3,12 +3,14 @@ export function processLegalResponse(response) {
   let responseText = typeof response === 'string' ? response : ((response.data && response.data.response) || JSON.stringify(response));
 
   // Extract citations: [Source: X] → array
-  const citations = [];
+  const citationsArray = [];
   const citationRegex = /\[Source: ([^\]]+)\]/g;
   let match;
   while ((match = citationRegex.exec(responseText)) !== null) {
-    citations.push(match[1]);
+    citationsArray.push(match[1]);
   }
+
+  const citations = [...new Set(citationsArray)]; // Dedupe
 
   // Parse confidence
   const confidenceMatch = responseText.match(/Confidence:\s*(HIGH|MEDIUM|LOW)/i);

@@ -1,5 +1,6 @@
 import express from 'express';
-import { listSessions } from '../lib/subfeed.js';
+import { listSessions, getChatHistory, clearHistory } from '../lib/subfeed.js';
+import { processLegalResponse } from '../lib/processor.js';
 
 const router = express.Router();
 
@@ -32,6 +33,54 @@ router.get('/', async (req, res, next) => {
     }
 
     res.status(statusCode).json(response);
+  }
+});
+
+router.get('/histories/:sessionId', async (req, res) => {
+  const { sessionId } = req.params;
+
+  if (!sessionId) {
+    return res.status(400).json({ error: 'sessionId is required' });
+  }
+
+  try {
+    const response = await getChatHistory(process.env.SUBFEED_ENTITY_ID, sessionId);
+    // Process messages in history: format assistant responses like clients receive them
+    if (response.data?.messages && Array.isArray(response.data?.messages)) {
+      response.data.messages = response.data.messages.map(message => {
+        if (message.role === 'assistant') {
+          // Process the assistant message through legal response formatter
+          const processed = processLegalResponse(message.content);
+          return {
+            ...message,
+            content: processed.response,
+            citations: processed.citations,
+            confidence: processed.confidence,
+            disclaimer_shown: processed.disclaimer_shown
+          };
+        }
+        return message;
+      });
+    }
+
+    return res.json(response);
+  } catch (error) {
+    return res.status(error.status || 500).json({ error: error.message });
+  }
+});
+
+router.delete('/histories/:sessionId', async (req, res) => {
+  const { sessionId } = req.params;
+
+  if (!sessionId) {
+    return res.status(400).json({ error: 'sessionId is required' });
+  }
+
+  try {
+    const response = await clearHistory(process.env.SUBFEED_ENTITY_ID, sessionId);
+    return res.json({ success: true, data: response });
+  } catch (error) {
+    return res.status(error.status || 500).json({ error: error.message });
   }
 });
 

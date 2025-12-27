@@ -66,4 +66,49 @@ export async function listSessions(entityId, page = 1, limit = 10) {
   }
 }
 
+
+/**
+ * Get chat history for a session
+ * @param {string} entityId - The entity/workspace ID
+ * @param {string} sessionId - The session ID
+ * @returns {Promise<Object>} Session data with messages
+ */
+export async function getChatHistory(entityId, sessionId) {
+  try {
+    const response = await subfeedClient.get(
+      `/v1/entity/${entityId}/session/${sessionId}`
+    );
+    return response.data;
+  } catch (error) {
+    const errorData = error.response?.data || {};
+    const errorMessage = errorData.error?.message || errorData.message || error.message || 'Unknown error';
+    const apiError = new Error(errorMessage);
+    apiError.status = error.response?.status || 500;
+    apiError.apiError = errorData;
+    throw apiError;
+  }
+}
+
+/**
+ * Clear chat history by deleting a session
+ * @param {string} entityId - The entity/workspace ID
+ * @param {string} sessionId - The session ID to delete
+ * @returns {Promise<Object>} Response from Subfeed API
+ */
+export async function clearHistory(entityId, sessionId) {
+  try {
+    const response = await subfeedClient.delete(
+      `/v1/entity/${entityId}/session/${sessionId}`
+    );
+    return response.data;
+  } catch (error) {
+    const errorData = error.response?.data || {};
+    const errorMessage = errorData.error?.message || errorData.message || error.message || 'Unknown error';
+    const apiError = new Error(errorMessage);
+    apiError.status = error.response?.status || 500;
+    apiError.apiError = errorData;
+    throw apiError;
+  }
+}
+
 export default subfeedClient;

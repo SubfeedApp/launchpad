@@ -1,7 +1,6 @@
 import express from 'express';
 import { sendChatMessage } from '../lib/subfeed.js';
 import { processLegalResponse } from '../lib/processor.js';
-import { SYSTEM_PROMPT } from '../prompts/systemPrompt.js';
 
 const router = express.Router();
 
@@ -17,10 +16,9 @@ router.post('/', async (req, res, next) => {
     }
 
     const entityId = process.env.SUBFEED_ENTITY_ID;
-    const fullPrompt = SYSTEM_PROMPT + message;
 
     // Send to Subfeed API
-    const response = await sendChatMessage(entityId, fullPrompt, sessionId, model);
+    const response = await sendChatMessage(entityId, message, sessionId, model);
 
     // Process response
     const processedResponse = processLegalResponse(response);
