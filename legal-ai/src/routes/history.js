@@ -36,7 +36,7 @@ router.get('/', async (req, res, next) => {
   }
 });
 
-router.get('/histories/:sessionId', async (req, res) => {
+router.get('/:sessionId', async (req, res) => {
   const { sessionId } = req.params;
 
   if (!sessionId) {
@@ -69,7 +69,7 @@ router.get('/histories/:sessionId', async (req, res) => {
   }
 });
 
-router.delete('/histories/:sessionId', async (req, res) => {
+router.delete('/:sessionId', async (req, res) => {
   const { sessionId } = req.params;
 
   if (!sessionId) {

@@ -33,7 +33,7 @@ for (const envVar of requiredEnvVars) {
 // Routes
 app.use('/chat', chatRouter);
 app.use('/analyze-contract', analyzeRouter);
-app.use('/history', historyRouter);
+app.use('/histories', historyRouter);
 
 // Health check endpoint
 app.get('/health', (req, res) => {
