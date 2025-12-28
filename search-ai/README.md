@@ -38,3 +38,13 @@ curl -X POST http://localhost:3000/search \
   -H "Content-Type: application/json" \
   -d '{"query": "What is the current price of Bitcoin?"}'
 ```
+
+## Response Schema
+
+```json
+{
+  "answer": "Bitcoin is currently trading at...",
+  "citations": [{ "index": 1, "title": "...", "url": "...", "snippet": "..." }],
+  "timestamp": "2025-01-01T00:00:00.000Z"
+}
+```
