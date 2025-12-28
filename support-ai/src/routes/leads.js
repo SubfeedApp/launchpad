@@ -3,6 +3,7 @@ import express from 'express';
 const router = express.Router();
 
 // In-memory leads store (use Supabase for persistence)
+// TODO: Replace with Supabase for persistence
 export const leads = [];
 
 router.get('/', async (req, res) => {

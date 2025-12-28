@@ -4,7 +4,7 @@ import { detectSentiment } from './sentiment.js';
 export function processSupportResponse(response, userMessage) {
   const responseText = typeof response === 'string' 
     ? response 
-    : (response?.data?.response || response?.response || JSON.stringify(response));
+    : (response?.data?.response || response?.response || JSON.stringify(response) || '');
 
   const { escalation, escalation_reason } = detectEscalation(userMessage);
   const extracted_email = extractEmail(userMessage);

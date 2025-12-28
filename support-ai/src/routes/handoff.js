@@ -1,5 +1,6 @@
 import express from 'express';
 import { leads } from './leads.js';
+import crypto from 'crypto';
 
 const router = express.Router();
 
