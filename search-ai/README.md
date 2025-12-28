@@ -7,7 +7,6 @@ Launch your own Perplexity-style AI search in 5 minutes.
 - ✅ Real-time web search
 - ✅ AI-generated summary
 - ✅ Citations included
-- ✅ Follow-up questions
 - ✅ One-click Vercel deploy
 
 ## Setup
@@ -24,10 +23,9 @@ Launch your own Perplexity-style AI search in 5 minutes.
 
 ## Endpoints
 
-| Method | Path             | Description         |
-| ------ | ---------------- | ------------------- |
-| POST   | /search          | Search + AI summary |
-| POST   | /search/followup | Follow-up questions |
+| Method | Path    | Description         |
+| ------ | ------- | ------------------- |
+| POST   | /search | Search + AI summary |
 
 ## Usage
 
