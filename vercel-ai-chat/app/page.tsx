@@ -32,7 +32,7 @@ import {
 } from "@/components/chat";
 
 export default function Chat() {
-  const [model, setModel] = useState("openai/gpt-4o-mini");
+  const [model, setModel] = useState("gpt-5-nano");
   const [pendingFiles, setPendingFiles] = useState<File[]>([]);
   const [sidePaneOpen, setSidePaneOpen] = useState(false);
 

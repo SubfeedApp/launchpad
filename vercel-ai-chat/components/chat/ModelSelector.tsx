@@ -10,10 +10,10 @@ import {
 } from "@/components/ui/popover";
 
 const MODELS = [
-  { id: "gpt-4o-mini", name: "GPT-4o Mini", provider: "OpenAI" },
+  { id: "gpt-5-nano", name: "GPT-5 Nano", provider: "OpenAI" },
+  { id: "gpt-5-mini", name: "GPT-5 Mini", provider: "OpenAI" },
+  { id: "gpt-5", name: "GPT-5", provider: "OpenAI" },
   { id: "gpt-4o", name: "GPT-4o", provider: "OpenAI" },
-  { id: "gpt-4-turbo", name: "GPT-4 Turbo", provider: "OpenAI" },
-  { id: "gpt-3.5-turbo", name: "GPT-3.5 Turbo", provider: "OpenAI" },
 ];
 
 interface ModelSelectorProps {
