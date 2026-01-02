@@ -1,8 +1,7 @@
 "use client";
 
-import { useState } from "react";
-import { useChat } from "@ai-sdk/react";
-import { Menu } from "lucide-react";
+import { useState, useRef, useEffect } from "react";
+import { Loader2Icon, Menu } from "lucide-react";
 import {
   Conversation,
   ConversationContent,
@@ -31,16 +30,20 @@ import {
   SidePane,
 } from "@/components/chat";
 
+interface ChatMessage {
+  id: string;
+  role: "user" | "assistant";
+  content: string;
+}
+
 export default function Chat() {
-  const [model, setModel] = useState("gpt-5-nano");
+  const [model, setModel] = useState("openai/gpt-5-nano");
   const [pendingFiles, setPendingFiles] = useState<File[]>([]);
   const [sidePaneOpen, setSidePaneOpen] = useState(false);
-
-  const { messages, input, setInput, handleSubmit, status, reload } = useChat({
-    body: { model },
-  });
-
-  const isLoading = status === "streaming" || status === "submitted";
+  const [messages, setMessages] = useState<ChatMessage[]>([]);
+  const [input, setInput] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+  const [sessionId, setSessionId] = useState<string | null>(null);
 
   const handleAttach = (files: File[]) => {
     setPendingFiles((prev) => [...prev, ...files]);
@@ -50,10 +53,114 @@ export default function Chat() {
     setPendingFiles((prev) => prev.filter((_, i) => i !== index));
   };
 
-  const handleFormSubmit = () => {
-    if (input.trim() || pendingFiles.length > 0) {
-      handleSubmit();
-      setPendingFiles([]);
+  const handleFormSubmit = async () => {
+    if ((!input.trim() && pendingFiles.length === 0) || isLoading) return;
+
+    const userMessage = input.trim();
+    setInput("");
+
+    const newUserMessage: ChatMessage = {
+      id: Date.now().toString(),
+      role: "user",
+      content: userMessage,
+    };
+
+    setMessages((prev) => [...prev, newUserMessage]);
+    setIsLoading(true);
+    setPendingFiles([]);
+
+    try {
+      const res = await fetch("/api/chat", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          message: userMessage,
+          sessionId,
+          model,
+        }),
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        throw new Error(data.error || "Failed to send message");
+      }
+
+      setSessionId(data.sessionId);
+
+      const assistantMessage: ChatMessage = {
+        id: (Date.now() + 1).toString(),
+        role: "assistant",
+        content: data.response,
+      };
+
+      setMessages((prev) => [...prev, assistantMessage]);
+    } catch (error) {
+      console.error("Chat error:", error);
+
+      const errorMessage: ChatMessage = {
+        id: (Date.now() + 1).toString(),
+        role: "assistant",
+        content: "Sorry, something went wrong. Please try again.",
+      };
+
+      setMessages((prev) => [...prev, errorMessage]);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const reload = async () => {
+    if (messages.length === 0 || isLoading) return;
+
+    // Remove last assistant message and resend last user message
+    const lastUserMessageIndex = messages.findLastIndex(
+      (m) => m.role === "user"
+    );
+    if (lastUserMessageIndex === -1) return;
+
+    const lastUserMessage = messages[lastUserMessageIndex];
+    setMessages(messages.slice(0, -1)); // Remove last assistant message
+    setIsLoading(true);
+
+    try {
+      const res = await fetch("/api/chat", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          message: lastUserMessage.content,
+          sessionId,
+          model,
+        }),
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        throw new Error(data.error || "Failed to send message");
+      }
+
+      setSessionId(data.sessionId);
+
+      const assistantMessage: ChatMessage = {
+        id: Date.now().toString(),
+        role: "assistant",
+        content: data.response,
+      };
+
+      setMessages((prev) => [...prev, assistantMessage]);
+    } catch (error) {
+      console.error("Chat error:", error);
+
+      const errorMessage: ChatMessage = {
+        id: Date.now().toString(),
+        role: "assistant",
+        content: "Sorry, something went wrong. Please try again.",
+      };
+
+      setMessages((prev) => [...prev, errorMessage]);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -109,6 +216,16 @@ export default function Chat() {
                   )}
                 </Message>
               ))
+            )}
+            {isLoading && messages[messages.length - 1]?.role === "user" && (
+              <Message from="assistant">
+                <MessageContent>
+                  <div className="flex items-center gap-2">
+                    <Loader2Icon className="size-4 animate-spin" />
+                    <span className="text-muted-foreground">Thinking...</span>
+                  </div>
+                </MessageContent>
+              </Message>
             )}
           </ConversationContent>
           <ConversationScrollButton />

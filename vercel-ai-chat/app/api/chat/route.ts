@@ -1,39 +1,25 @@
-import { createDataStreamResponse, formatDataStreamPart } from 'ai';
+import { NextRequest, NextResponse } from 'next/server';
+import { chat } from '@/lib/subfeed';
 
-const SUBFEED_API = 'https://api.subfeed.app';
-const SUBFEED_KEY = process.env.SUBFEED_API_KEY;
-const SUBFEED_ENTITY_ID = process.env.SUBFEED_ENTITY_ID;
-
-export async function POST(req: Request) {
+export async function POST(req: NextRequest) {
   try {
-    const { messages, model } = await req.json();
-    const message = messages[messages.length - 1]?.content;
+    const { message, sessionId, model } = await req.json();
 
-    const res = await fetch(`${SUBFEED_API}/v1/entity/${SUBFEED_ENTITY_ID}/chat`, {
-      method: 'POST',
-      headers: {
-        Authorization: `Bearer ${SUBFEED_KEY}`,
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        message,
-        model, // Pass model override
-      }),
-    });
+    if (!message) {
+      return NextResponse.json(
+        { error: 'message is required' },
+        { status: 400 }
+      );
+    }
 
-    const data = await res.json();
-    const responseText = data.data?.response || 'Sorry, I could not process your request.';
+    const response = await chat(message, sessionId, model);
 
-    return createDataStreamResponse({
-      execute: async (dataStream) => {
-        dataStream.write(formatDataStreamPart('text', responseText));
-      },
-    });
+    return NextResponse.json(response);
   } catch (error) {
-    return createDataStreamResponse({
-      execute: async (dataStream) => {
-        dataStream.write(formatDataStreamPart('text', 'Sorry, service temporarily unavailable.'));
-      },
-    });
+    console.error('Chat error:', error);
+    return NextResponse.json(
+      { error: error instanceof Error ? error.message : 'Chat failed' },
+      { status: 500 }
+    );
   }
 }
