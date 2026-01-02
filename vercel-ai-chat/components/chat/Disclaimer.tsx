@@ -17,7 +17,7 @@ export function Disclaimer({
         className
       )}
     >
-      <AlertCircle className="size-3" />
+      <AlertCircle className="hidden sm:block size-3" />
       <span>{text}</span>
     </div>
   );
