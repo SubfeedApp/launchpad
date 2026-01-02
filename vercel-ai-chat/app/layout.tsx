@@ -1,13 +1,19 @@
-import './globals.css';
+import type { Metadata } from "next";
+import "./globals.css";
 
-export const metadata = {
-  title: 'AI Chat - Powered by Subfeed',
+export const metadata: Metadata = {
+  title: "AI Chat - Powered by Subfeed",
+  description: "Chat with AI powered by Subfeed Cloud",
 };
 
-export default function Layout({ children }: { children: React.ReactNode }) {
+export default function RootLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   return (
     <html lang="en">
-      <body className="h-screen">{children}</body>
+      <body className="h-screen antialiased">{children}</body>
     </html>
   );
 }
