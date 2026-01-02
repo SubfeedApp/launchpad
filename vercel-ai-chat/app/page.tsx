@@ -172,11 +172,11 @@ export default function Chat() {
         <header className="flex items-center justify-between px-4 py-3 border-b">
           <h1 className="font-semibold">AI Chat</h1>
           <div className="flex items-center gap-2">
-            <ModelSelector
+            {/* <ModelSelector
               value={model}
               onChange={setModel}
               disabled={isLoading}
-            />
+            /> */}
             <button
               onClick={() => setSidePaneOpen(true)}
               className="p-2 rounded-lg hover:bg-accent transition-colors lg:hidden"
