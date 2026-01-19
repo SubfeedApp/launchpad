@@ -1,0 +1,199 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Include streamdown's built-in styles */
+@source "../node_modules/streamdown/dist/index.js";
+
+@layer base {
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 0 0% 3.9%;
+    --card: 0 0% 100%;
+    --card-foreground: 0 0% 3.9%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 0 0% 3.9%;
+    --primary: 0 0% 9%;
+    --primary-foreground: 0 0% 98%;
+    --secondary: 0 0% 96.1%;
+    --secondary-foreground: 0 0% 9%;
+    --muted: 0 0% 96.1%;
+    --muted-foreground: 0 0% 45.1%;
+    --accent: 0 0% 96.1%;
+    --accent-foreground: 0 0% 9%;
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 0 0% 89.8%;
+    --input: 0 0% 89.8%;
+    --ring: 0 0% 3.9%;
+    --radius: 0.5rem;
+  }
+
+  .dark {
+    --background: 0 0% 3.9%;
+    --foreground: 0 0% 98%;
+    --card: 0 0% 3.9%;
+    --card-foreground: 0 0% 98%;
+    --popover: 0 0% 3.9%;
+    --popover-foreground: 0 0% 98%;
+    --primary: 0 0% 98%;
+    --primary-foreground: 0 0% 9%;
+    --secondary: 0 0% 14.9%;
+    --secondary-foreground: 0 0% 98%;
+    --muted: 0 0% 14.9%;
+    --muted-foreground: 0 0% 63.9%;
+    --accent: 0 0% 14.9%;
+    --accent-foreground: 0 0% 98%;
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 0 0% 14.9%;
+    --input: 0 0% 14.9%;
+    --ring: 0 0% 83.1%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+}
+
+/* Streamdown custom styles */
+
+/* Headings */
+[data-streamdown="heading-1"] {
+  @apply text-2xl font-semibold text-foreground mt-6 mb-3 first:mt-0;
+}
+
+[data-streamdown="heading-2"] {
+  @apply text-xl font-semibold text-foreground mt-6 mb-3 first:mt-0;
+}
+
+[data-streamdown="heading-3"] {
+  @apply text-lg font-semibold text-foreground mt-5 mb-2 first:mt-0;
+}
+
+[data-streamdown="heading-4"],
+[data-streamdown="heading-5"],
+[data-streamdown="heading-6"] {
+  @apply text-base font-semibold text-foreground mt-4 mb-2 first:mt-0;
+}
+
+/* Paragraphs */
+[data-streamdown="paragraph"] {
+  @apply my-3 first:mt-0 last:mb-0 leading-relaxed;
+}
+
+/* Strong/Bold */
+[data-streamdown="strong"] {
+  @apply font-semibold text-foreground;
+}
+
+/* Emphasis/Italic */
+[data-streamdown="emphasis"] {
+  @apply italic;
+}
+
+/* Links */
+[data-streamdown="link"] {
+  @apply text-primary underline underline-offset-2 hover:text-primary/80 transition-colors;
+}
+
+/* Lists */
+[data-streamdown="unordered-list"] {
+  @apply my-3 pl-6 list-disc;
+}
+
+[data-streamdown="ordered-list"] {
+  @apply my-3 pl-6 list-decimal;
+}
+
+[data-streamdown="list-item"] {
+  @apply my-1;
+}
+
+/* Blockquote */
+[data-streamdown="blockquote"] {
+  @apply border-l-4 border-border pl-4 my-4 italic text-muted-foreground;
+}
+
+/* Horizontal Rule */
+[data-streamdown="thematic-break"] {
+  @apply my-6 border-border;
+}
+
+/* Inline Code */
+[data-streamdown="inline-code"] {
+  @apply bg-muted text-foreground px-1.5 py-0.5 rounded text-[0.875em] font-mono;
+}
+
+/* Code Block Container */
+[data-streamdown="code-block"] {
+  @apply my-4 rounded-lg border border-border bg-muted/30 overflow-hidden;
+}
+
+/* Code Block Header (language label + buttons) */
+[data-streamdown="code-block"] > div:first-child {
+  @apply flex items-center justify-between border-b border-border bg-muted/50 px-4 py-2;
+}
+
+/* Code Block Language Label */
+[data-streamdown="code-block"] [data-streamdown="code-language"] {
+  @apply text-xs text-muted-foreground font-mono;
+}
+
+/* Code Block Content */
+[data-streamdown="code-block"] pre {
+  @apply p-4 text-sm overflow-x-auto bg-transparent m-0;
+}
+
+[data-streamdown="code-block"] code {
+  @apply font-mono text-sm leading-relaxed;
+}
+
+/* Code Block Buttons */
+[data-streamdown="code-block"] button {
+  @apply size-7 p-0 rounded-md hover:bg-accent transition-colors text-muted-foreground hover:text-foreground;
+}
+
+/* Tables */
+[data-streamdown="table"] {
+  @apply w-full my-4 border-collapse overflow-hidden rounded-lg border border-border;
+}
+
+[data-streamdown="table-header"] {
+  @apply bg-muted;
+}
+
+[data-streamdown="table-header-cell"] {
+  @apply px-4 py-2 text-left font-semibold text-foreground border-b border-border;
+}
+
+[data-streamdown="table-row"] {
+  @apply border-b border-border last:border-b-0;
+}
+
+[data-streamdown="table-cell"] {
+  @apply px-4 py-2 text-left;
+}
+
+/* Images */
+[data-streamdown="image"] {
+  @apply max-w-full rounded-lg my-4;
+}
+
+/* Task List */
+[data-streamdown="task-list"] {
+  @apply my-3 pl-0 list-none;
+}
+
+[data-streamdown="task-list-item"] {
+  @apply flex items-start gap-2 my-1;
+}
+
+[data-streamdown="task-list-item"] input[type="checkbox"] {
+  @apply mt-1 size-4 rounded border-border;
+}
