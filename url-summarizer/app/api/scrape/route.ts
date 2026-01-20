@@ -27,7 +27,7 @@ export async function POST(req: NextRequest) {
     // Check for addon not enabled error
     if (message.includes("ADDON_NOT_ENABLED") || message.includes("addon")) {
       return NextResponse.json(
-        { error: "Web scrape not enabled." },
+        { error: "Web extract addon not enabled. Enable 'web_extract' on your entity." },
         { status: 403 }
       );
     }

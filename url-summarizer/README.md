@@ -9,7 +9,7 @@ AI that reads any URL and summarizes it instantly.
 ## Setup
 
 1. Create entity at [cloud.subfeed.app](https://cloud.subfeed.app)
-2. Enable `web_scrape` addon
+2. Enable `web_extract` addon
 3. Copy API key + Entity ID
 4. Deploy to Vercel
 
@@ -35,7 +35,7 @@ Open http://localhost:3000
 
 ## Required Addon
 
-This template requires the `web_scrape` addon enabled on your entity.
+This template requires the `web_extract` addon enabled on your entity.
 
 ## Stack
 

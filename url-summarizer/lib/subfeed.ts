@@ -28,11 +28,11 @@ export async function chat(message: string, sessionId?: string, model?: string) 
 }
 
 /**
- * Scrape URL content
+ * Scrape URL content using web_extract action
  */
 export async function scrape(url: string) {
   const res = await fetch(
-    `${SUBFEED_API}/v1/entity/${SUBFEED_ENTITY_ID}/actions/web_scrape`,
+    `${SUBFEED_API}/v1/entity/${SUBFEED_ENTITY_ID}/actions/web_extract`,
     {
       method: "POST",
       headers: {
@@ -53,7 +53,7 @@ export async function scrape(url: string) {
     // Check for addon not enabled
     if (errorMessage.includes("Action not found") || errorMessage.includes("not found")) {
       throw new Error(
-        "Web scrape addon is not enabled. Please enable the 'web_scrape' addon on your entity at cloud.subfeed.app"
+        "Web extract addon is not enabled. Please enable the 'web_extract' addon on your entity at cloud.subfeed.app"
       );
     }
 
