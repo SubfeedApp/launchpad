@@ -9,7 +9,7 @@ Summarize any URL with AI in seconds. Built with [Subfeed](https://subfeed.app).
 ## Setup
 
 1. Create entity at [cloud.subfeed.app](https://cloud.subfeed.app)
-2. **Enable the `web_scrape` action** on your entity
+2. **Enable the `web_extract` action** on your entity
 3. Click deploy button above
 4. Add environment variables:
    - `SUBFEED_ENTITY_ID` - Your entity ID
@@ -30,7 +30,7 @@ Open [http://localhost:3000](http://localhost:3000)
 ## How It Works
 
 1. User pastes a URL
-2. App calls Subfeed's `web_scrape` action to extract content
+2. App calls Subfeed's `web_extract` action to extract content
 3. App calls Subfeed's chat API to summarize the content
 4. Summary is displayed with markdown formatting
 
@@ -39,7 +39,7 @@ Open [http://localhost:3000](http://localhost:3000)
 | Layer | Technology |
 |-------|------------|
 | UI | React + Tailwind CSS |
-| Scraping | Subfeed `web_scrape` action |
+| Scraping | Subfeed `web_extract` action |
 | Summarization | Subfeed chat API |
 | Hosting | Vercel |
 

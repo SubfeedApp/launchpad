@@ -19,9 +19,16 @@ export async function POST(req: Request) {
     return Response.json(result);
   } catch (error) {
     console.error("Scrape error:", error);
-    return Response.json(
-      { error: error instanceof Error ? error.message : "Failed to process URL" },
-      { status: 500 }
-    );
+    const message = error instanceof Error ? error.message : "Failed to process URL";
+
+    // Check for addon not enabled error
+    if (message.includes("ADDON_NOT_ENABLED") || message.includes("addon") || message.includes("Action not found")) {
+      return Response.json(
+        { error: "Web extract not enabled. Enable the web_extract addon on your entity." },
+        { status: 403 }
+      );
+    }
+
+    return Response.json({ error: message }, { status: 500 });
   }
 }

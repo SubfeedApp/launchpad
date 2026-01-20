@@ -28,19 +28,21 @@ export async function chat(message: string, model?: string) {
 }
 
 /**
- * Scrape a URL using Subfeed's web_scrape action
- * Note: Requires web_scrape action to be enabled on the entity
+ * Scrape a URL using Subfeed's web_extract action
+ * Note: Requires web_extract action to be enabled on the entity
  */
 export async function scrape(url: string): Promise<ScrapeResult> {
   const res = await fetch(
-    `${SUBFEED_API}/v1/entity/${SUBFEED_ENTITY_ID}/actions/web_scrape`,
+    `${SUBFEED_API}/v1/entity/${SUBFEED_ENTITY_ID}/actions/web_extract`,
     {
       method: "POST",
       headers: {
         Authorization: `Bearer ${SUBFEED_KEY}`,
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ url }),
+      body: JSON.stringify({
+        params: { url, format: "markdown" },
+      }),
     }
   );
 
