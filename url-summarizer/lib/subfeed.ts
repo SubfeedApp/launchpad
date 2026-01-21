@@ -28,11 +28,11 @@ export async function chat(message: string, sessionId?: string, model?: string) 
 }
 
 /**
- * Scrape URL content
+ * Extract URL content
  */
-export async function scrape(url: string) {
+export async function extract(url: string) {
   const res = await fetch(
-    `${SUBFEED_API}/v1/entity/${SUBFEED_ENTITY_ID}/actions/web_scrape`,
+    `${SUBFEED_API}/v1/entity/${SUBFEED_ENTITY_ID}/actions/web_extract`,
     {
       method: "POST",
       headers: {
@@ -40,7 +40,7 @@ export async function scrape(url: string) {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        params: { url, format: "markdown" },
+        params: { url },
       }),
     }
   );
@@ -48,12 +48,12 @@ export async function scrape(url: string) {
   const data = await res.json().catch(() => ({}));
 
   if (!res.ok || !data.success) {
-    const errorMessage = parseErrorMessage(data, `Scrape failed: ${res.status}`);
+    const errorMessage = parseErrorMessage(data, `Extract failed: ${res.status}`);
 
     // Check for addon not enabled
     if (errorMessage.includes("Action not found") || errorMessage.includes("not found")) {
       throw new Error(
-        "Web scrape addon is not enabled. Please enable the 'web_scrape' addon on your entity at cloud.subfeed.app"
+        "Web extract addon is not enabled. Please enable the 'web_extract' addon on your entity at subfeed.app"
       );
     }
 
@@ -92,14 +92,17 @@ function parseErrorMessage(errorData: any, fallback: string): string {
 }
 
 /**
- * Scrape URL and summarize with AI
+ * Extract URL and summarize with AI
  */
 export async function scrapeAndSummarize(url: string) {
-  // 1. Scrape the URL
-  const scrapeResult = await scrape(url);
+  // 1. Extract the URL content
+  const extractResult = await extract(url);
 
-  const content = scrapeResult.data?.content || scrapeResult.content;
-  const title = scrapeResult.data?.title || scrapeResult.title || url;
+  // web_extract returns nested data.data structure
+  const extractData = extractResult.data?.data || extractResult.data || {};
+
+  const content = extractData.content || "";
+  const title = extractData.title || extractData.metadata?.title || url;
 
   if (!content) {
     throw new Error("No content found at URL");
