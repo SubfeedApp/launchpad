@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Search, Sparkles } from "lucide-react";
+import { Search, Sparkles, AlertCircle, X } from "lucide-react";
 import { useResearchChat } from "@/hooks/useResearchChat";
 import { ToolStatus, SourceGrid } from "@/components/research-ai";
 import { SidePane, Disclaimer } from "@/components/chat";
@@ -15,7 +15,7 @@ import {
 } from "@/components/ai-elements/prompt-input";
 
 export default function ResearchPage() {
-  const { result, sources, toolStatus, isLoading, search, clear } =
+  const { result, sources, toolStatus, isLoading, error, search, clear, clearError } =
     useResearchChat();
   const [input, setInput] = useState("");
   const [sidePaneOpen, setSidePaneOpen] = useState(false);
@@ -95,6 +95,23 @@ export default function ResearchPage() {
 
               {/* Tool Status */}
               {toolStatus && <ToolStatus toolCall={toolStatus} />}
+
+              {/* Error Message */}
+              {error && (
+                <div className="flex items-start gap-3 p-4 rounded-lg bg-red-50 border border-red-200 text-red-800">
+                  <AlertCircle className="size-5 text-red-500 flex-shrink-0 mt-0.5" />
+                  <div className="flex-1 min-w-0">
+                    <p className="font-medium text-sm">Search failed</p>
+                    <p className="text-sm mt-1 break-words">{error}</p>
+                  </div>
+                  <button
+                    onClick={clearError}
+                    className="flex-shrink-0 p-1 hover:bg-red-100 rounded transition-colors"
+                  >
+                    <X className="size-4" />
+                  </button>
+                </div>
+              )}
 
               {/* Answer */}
               {result.answer && (

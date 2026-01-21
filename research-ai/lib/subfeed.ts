@@ -76,7 +76,7 @@ export async function search(
     // Check for addon not enabled
     if (errorMessage.includes("Action not found") || errorMessage.includes("not found") || res.status === 403) {
       throw new Error(
-        "Web search addon is not enabled. Please enable the 'web_search' addon on your entity at cloud.subfeed.app"
+        "Web search addon is not enabled. Please enable the 'web_search' addon on your entity at subfeed.app"
       );
     }
 
