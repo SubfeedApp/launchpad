@@ -1,6 +1,4 @@
-const SUBFEED_API = process.env.NODE_ENV === "production" 
-  ? "https://api.subfeed.app" 
-  : "https://dev-api.subfeed.app";
+const SUBFEED_API = process.env.SUBFEED_API_URL || "https://api.subfeed.app";
 const SUBFEED_KEY = process.env.SUBFEED_API_KEY;
 const SUBFEED_ENTITY_ID = process.env.SUBFEED_ENTITY_ID;
 
@@ -25,6 +23,18 @@ export async function chat(message: string, model?: string) {
   }
 
   return res.json();
+}
+
+/**
+ * Parse error message from API response
+ */
+function parseErrorMessage(errorData: any, fallback: string): string {
+  if (!errorData) return fallback;
+  if (typeof errorData.error === 'string') return errorData.error;
+  if (errorData.error?.message) return errorData.error.message;
+  if (errorData.message) return errorData.message;
+  if (typeof errorData.error === 'object') return JSON.stringify(errorData.error);
+  return fallback;
 }
 
 /**
@@ -58,9 +68,20 @@ export async function search(
     }
   );
 
-  if (!res.ok) {
-    throw new Error(`Subfeed API error: ${res.status}`);
+  const data = await res.json().catch(() => ({}));
+
+  if (!res.ok || !data.success) {
+    const errorMessage = parseErrorMessage(data, `Subfeed API error: ${res.status}`);
+
+    // Check for addon not enabled
+    if (errorMessage.includes("Action not found") || errorMessage.includes("not found") || res.status === 403) {
+      throw new Error(
+        "Web search addon is not enabled. Please enable the 'web_search' addon on your entity at cloud.subfeed.app"
+      );
+    }
+
+    throw new Error(errorMessage);
   }
 
-  return res.json();
+  return data;
 }
