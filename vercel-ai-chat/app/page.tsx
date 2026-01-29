@@ -37,7 +37,7 @@ interface ChatMessage {
 }
 
 export default function Chat() {
-  const [model, setModel] = useState("openai/gpt-5-nano");
+  const [model, setModel] = useState("openai/gpt-oss-120b:free");
   const [pendingFiles, setPendingFiles] = useState<File[]>([]);
   const [sidePaneOpen, setSidePaneOpen] = useState(false);
   const [messages, setMessages] = useState<ChatMessage[]>([]);
@@ -115,7 +115,7 @@ export default function Chat() {
 
     // Remove last assistant message and resend last user message
     const lastUserMessageIndex = messages.findLastIndex(
-      (m) => m.role === "user"
+      (m) => m.role === "user",
     );
     if (lastUserMessageIndex === -1) return;
 
